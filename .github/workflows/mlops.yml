@@ -75,10 +75,6 @@ jobs:
           echo "accuracy=$ACC" >> $GITHUB_OUTPUT
 
       - name: Upload model to Cloud Storage
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: /tmp/sa-key.json
-        run: |
-          python - <<'EOF'
         run: |
           python - <<'EOF'
           import boto3, os
@@ -89,6 +85,10 @@ jobs:
           EOF
         env:
           CLOUD_BUCKET: ${{ secrets.CLOUD_BUCKET }}
+
+      - name: Save metrics as artifact
+        uses: actions/upload-artifact@v4
+        with:
           name: metrics
           path: outputs/metrics.json
 
